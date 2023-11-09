@@ -1,3 +1,8 @@
+# RTD aDIO Library
+
+This is a mirror of the [RTD ADIO library](https://www.rtd.com/software_drivers.htm).
+
+
 Linux Software (aDIO)
 
 SWP-700010042 rev L
