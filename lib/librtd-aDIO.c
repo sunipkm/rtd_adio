@@ -787,6 +787,31 @@ Exported library functions
 		return 0;
 	}
 
+	int
+	 WriteBit_aDIO(DeviceHandle Device, int PortNum, unsigned char BitNum,
+		       unsigned char Enable) {
+		union DEVICE_IO_OneBit wb;
+		if (BitNum > 7) {
+			errno = EINVAL;
+			return -EINVAL;
+		}
+		wb.OneBit.Bit = BitNum;
+		wb.OneBit.Data = Enable;
+		switch (PortNum) {
+		case 0:
+			wb.OneBit.Port = rPORT0DATA;
+			break;
+		case 1:
+			wb.OneBit.Port = rPORT1DATA;
+			break;
+		default:
+			errno = EINVAL;
+			return -EINVAL;
+			break;
+		}
+		return ioctl(Device->hDevice, ADIO_IOCTL_OUTBIT, &wb);
+	}
+
 	int InstallISR_aDIO(DeviceHandle Device,
 			    void (*IsrIrq) (isr_info_t), int policy,
 			    int priority) {

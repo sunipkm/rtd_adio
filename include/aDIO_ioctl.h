@@ -49,6 +49,41 @@ struct DEVICE_IO_Data
 };
 
 /**
+ * @brief
+ *      Structure for ADIO_IOCTL_OUTBIT transfers
+ */
+struct _DEVICE_IO_OneBit
+{
+    /**
+     * Port to access
+     */
+    unsigned char Port;
+    /**
+     * Bit to access
+     */
+    unsigned char Bit;
+    /**
+     * Data used during transaction
+     */
+    unsigned char Data;
+    /**
+     * @brief Unused
+     */
+    unsigned char Unused;
+};
+
+/**
+ * @brief
+ *      Structure for ADIO_IOCTL_OUTBIT transfers
+ */
+union DEVICE_IO_OneBit
+{
+    struct _DEVICE_IO_OneBit OneBit;
+    unsigned int Value;
+};
+
+
+/**
  * @def r_PORT_0_DIO
  * @brief Digital I/O Port 0 Register
  */
@@ -123,6 +158,14 @@ struct DEVICE_IO_Data
  */
 #define ADIO_IOCTL_OUTB \
     _IOW(__DEVICE_IOCTL_ID_LETTER, 0x811, struct DEVICE_IO_Data)
+
+/**
+ * @brief 
+ *     This ioctl outputs a bit to an aDIO register.
+ * 
+ */
+#define ADIO_IOCTL_OUTBIT \
+    _IOW(__DEVICE_IOCTL_ID_LETTER, 0x817, union DEVICE_IO_OneBit)
 
 /**
  * @brief 

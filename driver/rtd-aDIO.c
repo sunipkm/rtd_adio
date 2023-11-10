@@ -267,6 +267,38 @@ static int ADIO_OUTB_Handler(ulong arg, board_t * dev)
 	return 0;
 }
 
+static int ADIO_OUTBIT_Handler(ulong arg, board_t *dev)
+{
+	union DEVICE_IO_OneBit wb;
+	unsigned char val;
+#ifdef DEBUG
+	if (debug & DBG_IOCTLS)
+		printk(KERN_INFO "OUTBIT() ");
+#endif
+
+	if (copy_from_user(&wb, (union DEVICE_IO_OneBit *)arg, sizeof(wb)))
+		return -EFAULT;
+#ifdef DEBUG
+	if (debug & DBG_IOCTLS)
+		printk(KERN_INFO "PORT%u[%u]: %u\n", wb.Port, wb.Bit,
+		       wb.Data);
+#endif
+	if (dev->irq)
+		disable_irq(dev->irq);
+	spin_lock(&dev->lock);
+	val = r_inb_p(dev->io + wb.OneBit.Port); // get existing value
+	if (wb.OneBit.Data)
+		val |= (1 << wb.OneBit.Bit); // set bit
+	else
+		val &= ~(1 << wb.OneBit.Bit); // clear bit
+	r_outb_p(dev->io + wb.OneBit.Port, val); // write value
+	spin_unlock(&dev->lock);
+	if (dev->irq)
+		enable_irq(dev->irq);
+
+	return 0;
+}
+
 /******************************************************************************
 Get interrupt struct from int queue
 *******************************************************************************/
@@ -891,6 +923,10 @@ static long adio_ioctl(struct file *file, uint cmd, ulong arg)
 
 	case ADIO_IOCTL_OUTB:
 		rc = ADIO_OUTB_Handler(arg, dev);
+		break;
+
+	case ADIO_IOCTL_OUTBIT:
+		rc = ADIO_OUTBIT_Handler(arg, dev);
 		break;
 
 	case ADIO_IOCTL_INB:

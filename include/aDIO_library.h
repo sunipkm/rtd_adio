@@ -924,6 +924,46 @@ int ReadStrobe1_aDIO(DeviceHandle Device, unsigned char *val);
 
 int WritePort_aDIO(DeviceHandle Device, int PortNum, unsigned char Data);
 
+/********************************************************************************
+@brief 
+    This function write a bit to port PortNum.
+ 
+@param 
+    Device
+
+    Pointer to a pointer of a device structure.
+
+@param
+    PortNum
+
+    This is the port where write the data.
+
+@param
+    Bit
+    
+    The Bit of the port to enable/disable. Must be between 0 and 7.
+
+@param
+    Enable
+
+    Enable/disable the bit. Set to 0 to disable, non-zero to enable.
+
+@retval
+    0
+
+    Success.
+
+@retval
+    < 0
+
+    Failure with value returned as follows:@n@n
+        @arg \c
+        -EINVAL
+        The given port PortNum is not valid
+
+******************************************************************************/
+
+int WriteBit_aDIO(DeviceHandle Device, int PortNum, unsigned char Bit, unsigned char Enable);
 
 /******************************************************************************
 @brief

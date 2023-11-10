@@ -230,3 +230,7 @@ v03.02.02 (rev L)   06/07/2022 KRK
 -------------------------------------------
 - Added support for Kaby Lake chipsets
 - Patched kernel panics while unloading driver
+
+v03.03.00 (rev LSKM) 11/09/2023 SKM
+___________________________________________
+- Added support for toggling single port bits.
